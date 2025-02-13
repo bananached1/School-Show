@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body.dark {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        .countdown-item {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+
+        body.dark .theme-toggle {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #3d3d3d;
+        }
+
+        .number {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-variant-numeric: tabular-nums;
+        }
+
+        body.dark {
+          color: black;
+        }
+
+        body.dark .number {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .countdown-container {
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-out;
+        }
+
+        body.dark .countdown-container {
+            background-color: #1a1a1a;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+
+        /* Gradient text handling for dark mode */
+        body.dark .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Card backgrounds for dark mode */
+        body.dark .countdown-card {
+            background-color: #2d2d2d;
+            border: 1px solid #3d3d3d;
+        }
+
+        /* Enhanced transitions */
+        * {
+            transition: background-color 0.3s ease, 
+                      color 0.3s ease, 
+                      border-color 0.3s ease,
+                      box-shadow 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen transition-colors duration-300 ease-in-out bg-gray-50">
+    <div class="container mx-auto px-4 py-16">
+        <div class="text-center mb-8">
+            <button id="themeToggle" class="theme-toggle px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:transform hover:scale-105 bg-white text-gray-800 border border-gray-200">
+                🌓 Toggle Theme
+            </button>
+        </div>
+        
+        <div class="countdown-container max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8 backdrop-blur">
+            <h1 class="gradient-text text-4xl md:text-5xl font-bold mb-8 text-center">
+                School Show 2026
+            </h1>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="countdown-card countdown-item p-4 bg-blue-50 rounded-xl shadow-md">
+                    <div id="days" class="number text-4xl md:text-5xl font-bold text-blue-600">--</div>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm md:text-base mt-2">Days</div>
+                </div>
+                
+                <div class="countdown-card countdown-item p-4 bg-purple-50 rounded-xl shadow-md">
+                    <div id="hours" class="number text-4xl md:text-5xl font-bold text-purple-600">--</div>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm md:text-base mt-2">Hours</div>
+                </div>
+                
+                <div class="countdown-card countdown-item p-4 bg-pink-50 rounded-xl shadow-md">
+                    <div id="minutes" class="number text-4xl md:text-5xl font-bold text-pink-600">--</div>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm md:text-base mt-2">Minutes</div>
+                </div>
+                
+                <div class="countdown-card countdown-item p-4 bg-indigo-50 rounded-xl shadow-md">
+                    <div id="seconds" class="number text-4xl md:text-5xl font-bold text-indigo-600">--</div>
+                    <div class="text-gray-600 dark:text-gray-300 text-sm md:text-base mt-2">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let isDark = false;
+        
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            if (isDark) {
+                body.classList.add('dark');
+                document.querySelectorAll('.number').forEach(num => {
+                    num.style.color = '#a78bfa'; // Consistent purple color in dark mode
+                });
+            } else {
+                body.classList.remove('dark');
+                const colors = ['text-blue-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
+                document.querySelectorAll('.number').forEach((num, index) => {
+                    num.style.color = ''; // Reset to original color
+                });
+            }
+        });
+
+        const countDownDate = new Date("Feb 1, 2026 10:00:00").getTime();
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById("days").textContent = String(days).padStart(2, '0');
+            document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+            document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+            
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelectorAll('.number').forEach(el => {
+                    el.textContent = "00";
+                });
+            }
+        }
+
+        updateCountdown();
+        const x = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
