@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="white" stroke="gray" stroke-width="10"/><circle cx="50" cy="50" r="5" fill="gray"/><rect x="47" y="25" width="6" height="25" fill="gray" transform="rotate(0 50 50)"/><rect x="47" y="25" width="6" height="35" fill="gray" transform="rotate(90 50 50)"/></svg>'>
     <style>
         body.dark {
             background-color: #0a0a0a;
@@ -30,10 +31,6 @@
             font-variant-numeric: tabular-nums;
         }
 
-        body.dark {
-          color: black;
-        }
-
         body.dark .number {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
@@ -41,12 +38,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         .countdown-container {
@@ -59,11 +50,6 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .pulse {
-            animation: pulse 1s infinite;
-        }
-
-        /* Gradient text handling for dark mode */
         body.dark .gradient-text {
             background: linear-gradient(135deg, #60a5fa, #a78bfa);
             -webkit-background-clip: text;
@@ -71,32 +57,42 @@
             color: transparent;
         }
 
-        /* Card backgrounds for dark mode */
         body.dark .countdown-card {
             background-color: #2d2d2d;
             border: 1px solid #3d3d3d;
         }
 
-        /* Enhanced transitions */
         * {
             transition: background-color 0.3s ease, 
                       color 0.3s ease, 
                       border-color 0.3s ease,
                       box-shadow 0.3s ease;
         }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+        }
     </style>
 </head>
 <body class="min-h-screen transition-colors duration-300 ease-in-out bg-gray-50">
-    <div class="container mx-auto px-4 py-16">
-        <div class="text-center mb-8">
-            <button id="themeToggle" class="theme-toggle px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:transform hover:scale-105 bg-white text-gray-800 border border-gray-200">
-                🌓 Toggle Theme
-            </button>
-        </div>
-        
-        <div class="countdown-container max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8 backdrop-blur">
+    <div class="toggle-container">
+        <button id="themeToggle" class="theme-toggle px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:transform hover:scale-105 bg-white text-gray-800 border border-gray-200">
+            🌓 Toggle Theme
+        </button>
+    </div>
+
+    <div class="main-container">
+        <div class="countdown-container max-w-4xl mx-auto my-auto px-4">
             <h1 class="gradient-text text-4xl md:text-5xl font-bold mb-8 text-center">
-                School Show 2026
+                Time Until February 1, 2026
             </h1>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
@@ -133,13 +129,12 @@
             if (isDark) {
                 body.classList.add('dark');
                 document.querySelectorAll('.number').forEach(num => {
-                    num.style.color = '#a78bfa'; // Consistent purple color in dark mode
+                    num.style.color = '#a78bfa';
                 });
             } else {
                 body.classList.remove('dark');
-                const colors = ['text-blue-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
-                document.querySelectorAll('.number').forEach((num, index) => {
-                    num.style.color = ''; // Reset to original color
+                document.querySelectorAll('.number').forEach(num => {
+                    num.style.color = '';
                 });
             }
         });
